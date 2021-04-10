@@ -22,5 +22,7 @@ namespace Arca.Lexing.Tokens
             Type = type;
         }
 
+        public Token(Location location, TokenType type) : this("", location, type) { }
+
     }
 }

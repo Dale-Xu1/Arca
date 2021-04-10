@@ -20,10 +20,7 @@ namespace Arca.Lexing
         }
 
 
-        public override string ToString()
-        {
-            return $"{Line}:{Col}";
-        }
+        public override string ToString() => $"{Line}:{Col}";
 
     }
 }

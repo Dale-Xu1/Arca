@@ -45,9 +45,12 @@
   <ItemGroup>
     <Compile Include="Arca.cs" />
     <Compile Include="ArcaException.cs" />
+    <Compile Include="Lexing\CharacterUtil.cs" />
     <Compile Include="Lexing\InputStream.cs" />
     <Compile Include="Lexing\Lexer.cs" />
     <Compile Include="Lexing\Location.cs" />
+    <Compile Include="Lexing\StateMachines\IdentifierMachine.cs" />
+    <Compile Include="Lexing\StateMachines\StateMachine.cs" />
     <Compile Include="Lexing\Tokens\Token.cs" />
     <Compile Include="Lexing\Tokens\TokenType.cs" />
     <Compile Include="Program.cs" />

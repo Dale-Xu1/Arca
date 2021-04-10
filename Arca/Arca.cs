@@ -14,6 +14,12 @@ namespace Arca
         {
             InputStream stream = new InputStream(file);
             Lexer lexer = new Lexer(stream);
+
+            while (lexer.Current.Type != Lexing.Tokens.TokenType.EndOfInput)
+            {
+                Console.WriteLine(lexer.Current.Value);
+                lexer.Next();
+            }
         }
 
         public static void Error(ArcaException exception)

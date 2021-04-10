@@ -1,4 +1,5 @@
-﻿using Arca.Lexing.Tokens;
+﻿using Arca.Lexing.StateMachines;
+using Arca.Lexing.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,11 +25,23 @@ namespace Arca.Lexing
 
         public void Next()
         {
-            while (stream.Current != '\0')
+            SkipWhitespace();
+            Token? token = RunStateMachines();
+
+            if (token != null)
             {
-                Console.WriteLine(stream.Current);
-                stream.Next();
+                // Token was successfully created
+                Current = (Token) token;
+                return;
             }
+
+            // Raise error
+            ArcaException exception = new ArcaException(stream.Location, $"Unexpected '{stream.Current}'");
+            Arca.Error(exception);
+
+            // Skip character and try again
+            stream.Next();
+            Next();
         }
 
         public bool Check(params TokenType[] types)
@@ -38,8 +51,29 @@ namespace Arca.Lexing
         }
 
 
+        private void SkipWhitespace()
+        {
+            while (CharacterUtil.IsIndent(stream.Current) || CharacterUtil.IsNewLine(stream.Current))
+            {
+                stream.Next();
+            }
+        }
+
         private Token? RunStateMachines()
         {
+            if (stream.Current == '\0')
+            {
+                // End of input was reached
+                return new Token(stream.Location, TokenType.EndOfInput);
+            }
+
+            // Run state machines if they can start
+            if (IdentifierMachine.CanStart(stream))
+            {
+                IdentifierMachine machine = new IdentifierMachine(stream);
+                return machine.Run(); // TODO: Keywords
+            }
+
             return null;
         }
 
