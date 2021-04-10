@@ -17,9 +17,9 @@ namespace Arca.Lexing
         private readonly List<char> queue = new List<char>();
 
 
-        public InputStream(string path)
+        public InputStream(string file)
         {
-            reader = new StreamReader(path);
+            reader = new StreamReader(file);
             Current = NextCharacter();
         }
 

@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arca.cs" />
+    <Compile Include="ArcaException.cs" />
     <Compile Include="Lexing\InputStream.cs" />
     <Compile Include="Lexing\Lexer.cs" />
     <Compile Include="Lexing\Location.cs" />

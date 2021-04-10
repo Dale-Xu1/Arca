@@ -18,14 +18,29 @@ namespace Arca.Lexing
         public Lexer(InputStream stream)
         {
             this.stream = stream;
+            Next();
+        }
 
-            Console.WriteLine(stream.Lookahead(100));
 
+        public void Next()
+        {
             while (stream.Current != '\0')
             {
                 Console.WriteLine(stream.Current);
                 stream.Next();
             }
+        }
+
+        public bool Check(params TokenType[] types)
+        {
+            // TODO: Check token type
+            return true;
+        }
+
+
+        private Token? RunStateMachines()
+        {
+            return null;
         }
 
     }

@@ -1,5 +1,4 @@
-﻿using Arca.Lexing;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,10 +17,8 @@ namespace Arca
                 return;
             }
 
-            InputStream stream = new InputStream(args[0]);
-            Lexer lexer = new Lexer(stream);
-
-            Console.ReadLine();
+            Arca.Run(args[0]);
+            Console.ReadLine(); // TODO: Remove
         }
 
     }
