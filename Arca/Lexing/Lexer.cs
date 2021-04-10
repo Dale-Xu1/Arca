@@ -71,12 +71,6 @@ namespace Arca.Lexing
 
         private Token? RunStateMachines()
         {
-            if (CharacterUtil.IsNewLine(stream.Current))
-            {
-                stream.Next(); // Skip new line character
-                HandleIndentation();
-            }
-
         Queue:
             if (queue.Count > 0)
             {
@@ -93,6 +87,16 @@ namespace Arca.Lexing
 
                 QueueDedents(0);
                 goto Queue;
+            }
+            
+            if (CharacterUtil.IsNewLine(stream.Current))
+            {
+                // Output new line token
+                Token token = new Token(stream.Location, TokenType.NewLine);
+                stream.Next();
+
+                HandleIndentation();
+                return token;
             }
 
             // Run state machines if they can start
