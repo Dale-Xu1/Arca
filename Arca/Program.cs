@@ -1,4 +1,4 @@
-﻿using Arca.Lexer;
+﻿using Arca.Lexing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,14 +19,7 @@ namespace Arca
             }
 
             InputStream stream = new InputStream(args[0]);
-
-            Console.WriteLine(stream.Lookahead(100));
-
-            while (stream.Current != '\0')
-            {
-                Console.WriteLine(stream.Current);
-                stream.Next();
-            }
+            Lexer lexer = new Lexer(stream);
 
             Console.ReadLine();
         }

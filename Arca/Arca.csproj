@@ -43,9 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Lexer\InputStream.cs" />
-    <Compile Include="Lexer\Lexer.cs" />
-    <Compile Include="Lexer\Location.cs" />
+    <Compile Include="Lexing\InputStream.cs" />
+    <Compile Include="Lexing\Lexer.cs" />
+    <Compile Include="Lexing\Location.cs" />
+    <Compile Include="Lexing\Tokens\Token.cs" />
+    <Compile Include="Lexing\Tokens\TokenType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -53,10 +55,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Analyzer\" />
-    <Folder Include="Compiler\" />
-    <Folder Include="Parser\" />
-    <Folder Include="VirtualMachine\" />
+    <Folder Include="Analyzation\" />
+    <Folder Include="Compilation\" />
+    <Folder Include="Interpretation\" />
+    <Folder Include="Parsing\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
