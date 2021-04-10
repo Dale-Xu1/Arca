@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Arca.Lexer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,20 @@ namespace Arca
 
         private static void Main(string[] args)
         {
-            Console.WriteLine("Hello world");
+            if (args.Length < 1)
+            {
+                Console.Error.WriteLine("Usage: arca <file>");
+                return;
+            }
+
+            InputStream stream = new InputStream(args[0]);
+
+            while (stream.Current != '\0')
+            {
+                Console.WriteLine(stream.Current);
+                stream.Next();
+            }
+
             Console.ReadLine();
         }
 
