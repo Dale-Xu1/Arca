@@ -20,6 +20,8 @@ namespace Arca
 
             InputStream stream = new InputStream(args[0]);
 
+            Console.WriteLine(stream.Lookahead(100));
+
             while (stream.Current != '\0')
             {
                 Console.WriteLine(stream.Current);
