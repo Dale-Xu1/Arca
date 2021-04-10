@@ -18,7 +18,7 @@ namespace Arca
             }
 
             Arca.Run(args[0]);
-            Console.ReadLine(); // TODO: Remove
+            Console.ReadLine();
         }
 
     }

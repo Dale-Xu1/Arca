@@ -24,7 +24,9 @@ namespace Arca
 
         public static void Error(ArcaException exception)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.Error.WriteLine($"[{exception.Location}] {exception.Message}");
+            Console.ForegroundColor = ConsoleColor.Gray;
         }
 
     }

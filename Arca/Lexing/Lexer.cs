@@ -59,8 +59,13 @@ namespace Arca.Lexing
 
         public bool Check(params TokenType[] types)
         {
-            // TODO: Check token type
-            return true;
+            foreach (TokenType type in types)
+            {
+                // Find match
+                if (Current.Type == type) return true;
+            }
+
+            return false;
         }
 
 
