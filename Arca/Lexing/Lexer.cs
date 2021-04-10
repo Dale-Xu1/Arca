@@ -79,7 +79,7 @@ namespace Arca.Lexing
             }
             else if (stream.Current == '\0')
             {
-                if (indents.Count == 0)
+                if (indents.Count == 1) // 1 because there is always a 0 as the first element
                 {
                     // End of input was reached
                     return new Token(stream.Location, TokenType.EndOfInput);
@@ -94,6 +94,16 @@ namespace Arca.Lexing
             {
                 IdentifierMachine machine = new IdentifierMachine(stream);
                 return machine.Run(); // TODO: Keywords
+            }
+            else if (NumberMachine.CanStart(stream))
+            {
+                NumberMachine machine = new NumberMachine(stream);
+                return machine.Run();
+            }
+            else if (StringMachine.CanStart(stream))
+            {
+                StringMachine machine = new StringMachine(stream);
+                return machine.Run();
             }
 
             return null;
@@ -115,15 +125,11 @@ namespace Arca.Lexing
 
         private void QueueDedents(int indent)
         {
-            if (indent < indents.Peek())
+            while (indent < indents.Peek())
             {
-                do
-                {
-                    // Add dedents until current indent level is reached
-                    indents.Pop();
-                    queue.Enqueue(new Token(stream.Location, TokenType.Dedent));
-                }
-                while (indent < indents.Peek());
+                // Add dedents until current indent level is reached
+                indents.Pop();
+                queue.Enqueue(new Token(stream.Location, TokenType.Dedent));
             }
         }
 

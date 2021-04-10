@@ -50,7 +50,9 @@
     <Compile Include="Lexing\Lexer.cs" />
     <Compile Include="Lexing\Location.cs" />
     <Compile Include="Lexing\StateMachines\IdentifierMachine.cs" />
+    <Compile Include="Lexing\StateMachines\NumberMachine.cs" />
     <Compile Include="Lexing\StateMachines\StateMachine.cs" />
+    <Compile Include="Lexing\StateMachines\StringMachine.cs" />
     <Compile Include="Lexing\Tokens\Token.cs" />
     <Compile Include="Lexing\Tokens\TokenType.cs" />
     <Compile Include="Program.cs" />
