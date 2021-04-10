@@ -46,6 +46,9 @@
     <Compile Include="Arca.cs" />
     <Compile Include="ArcaException.cs" />
     <Compile Include="Lexing\CharacterUtil.cs" />
+    <Compile Include="Lexing\Constants\Constant.cs" />
+    <Compile Include="Lexing\Constants\KeywordLexer.cs" />
+    <Compile Include="Lexing\Constants\SymbolLexer.cs" />
     <Compile Include="Lexing\InputStream.cs" />
     <Compile Include="Lexing\Lexer.cs" />
     <Compile Include="Lexing\Location.cs" />

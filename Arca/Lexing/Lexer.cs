@@ -1,4 +1,5 @@
-﻿using Arca.Lexing.StateMachines;
+﻿using Arca.Lexing.Constants;
+using Arca.Lexing.StateMachines;
 using Arca.Lexing.Tokens;
 using System;
 using System.Collections.Generic;
@@ -93,7 +94,9 @@ namespace Arca.Lexing
             if (IdentifierMachine.CanStart(stream))
             {
                 IdentifierMachine machine = new IdentifierMachine(stream);
-                return machine.Run(); // TODO: Keywords
+                KeywordLexer keywordLexer = new KeywordLexer(machine);
+
+                return keywordLexer.Run();
             }
             else if (NumberMachine.CanStart(stream))
             {
@@ -106,7 +109,8 @@ namespace Arca.Lexing
                 return machine.Run();
             }
 
-            return null;
+            SymbolLexer symbolLexer = new SymbolLexer(stream);
+            return symbolLexer.Run();
         }
 
 

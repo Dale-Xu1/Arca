@@ -15,7 +15,11 @@ namespace Arca.Lexing.Tokens
         Indent, Dedent,
 
         True, False,
-        Null
+        Null,
+
+        Add, Subtract,
+        Multiply, Divide,
+        Modulo
 
     }
 }
