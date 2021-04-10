@@ -14,7 +14,7 @@ namespace Arca.Lexing
         public static bool IsDigit(char c) => (c >= '0' && c <= '9');
 
 
-        public static bool IsIndent(char c) => (c == ' ' || c == '\t');
+        public static bool IsWhitespace(char c) => (c == ' ' || c == '\t');
 
         public static bool IsNewLine(char c) => (c == '\n' || c == '\r');
 

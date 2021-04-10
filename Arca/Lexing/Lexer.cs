@@ -15,19 +15,31 @@ namespace Arca.Lexing
 
         private readonly InputStream stream;
 
+        private readonly Stack<int> indents = new Stack<int>();
+        private readonly Queue<Token> queue = new Queue<Token>(); // Only used for indents and dedents
+
 
         public Lexer(InputStream stream)
         {
             this.stream = stream;
+
+            // Initialize data
+            indents.Push(0);
+            HandleIndentation();
+
             Next();
         }
 
 
         public void Next()
         {
-            SkipWhitespace();
-            Token? token = RunStateMachines();
+            // Skip whitespace
+            while (CharacterUtil.IsWhitespace(stream.Current))
+            {
+                stream.Next();
+            }
 
+            Token? token = RunStateMachines();
             if (token != null)
             {
                 // Token was successfully created
@@ -36,7 +48,7 @@ namespace Arca.Lexing
             }
 
             // Raise error
-            ArcaException exception = new ArcaException(stream.Location, $"Unexpected '{stream.Current}'");
+            ArcaException exception = new ArcaException(stream.Location, $"Unexpected {stream.CurrentFormatted}");
             Arca.Error(exception);
 
             // Skip character and try again
@@ -51,20 +63,30 @@ namespace Arca.Lexing
         }
 
 
-        private void SkipWhitespace()
-        {
-            while (CharacterUtil.IsIndent(stream.Current) || CharacterUtil.IsNewLine(stream.Current))
-            {
-                stream.Next();
-            }
-        }
-
         private Token? RunStateMachines()
         {
-            if (stream.Current == '\0')
+            if (CharacterUtil.IsNewLine(stream.Current))
             {
-                // End of input was reached
-                return new Token(stream.Location, TokenType.EndOfInput);
+                stream.Next(); // Skip new line character
+                HandleIndentation();
+            }
+
+        Queue:
+            if (queue.Count > 0)
+            {
+                // Deque if tokens exist in queue
+                return queue.Dequeue();
+            }
+            else if (stream.Current == '\0')
+            {
+                if (indents.Count == 0)
+                {
+                    // End of input was reached
+                    return new Token(stream.Location, TokenType.EndOfInput);
+                }
+
+                QueueDedents(0);
+                goto Queue;
             }
 
             // Run state machines if they can start
@@ -75,6 +97,53 @@ namespace Arca.Lexing
             }
 
             return null;
+        }
+
+
+        private void HandleIndentation()
+        {
+            int indent = GetIndentation();
+            QueueDedents(indent);
+
+            // Nothing happens if the indentation is the same
+            if (indent == indents.Peek()) return;
+
+            // Add indent
+            indents.Push(indent);
+            queue.Enqueue(new Token(stream.Location, TokenType.Indent));
+        }
+
+        private void QueueDedents(int indent)
+        {
+            if (indent < indents.Peek())
+            {
+                do
+                {
+                    // Add dedents until current indent level is reached
+                    indents.Pop();
+                    queue.Enqueue(new Token(stream.Location, TokenType.Dedent));
+                }
+                while (indent < indents.Peek());
+            }
+        }
+
+        private int GetIndentation()
+        {
+            int indent = 0;
+            while (CharacterUtil.IsWhitespace(stream.Current))
+            {
+                stream.Next();
+                indent++; // Count indentation
+            }
+
+            if (CharacterUtil.IsNewLine(stream.Current))
+            {
+                // Recount if another new line is found
+                stream.Next();
+                return GetIndentation();
+            }
+
+            return indent;
         }
 
     }

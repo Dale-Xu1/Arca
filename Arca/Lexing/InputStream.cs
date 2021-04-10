@@ -13,6 +13,22 @@ namespace Arca.Lexing
         public char Current { get; private set; }
         public Location Location { get; private set; } = new Location(1, 0);
 
+        public string CurrentFormatted
+        {
+            get
+            {
+                switch (Current)
+                {
+                    case '\0': return "end of input";
+                    case '\n':
+                    case '\r': return "new line";
+                    case '\t': return "tab";
+
+                    default: return $"'{Current}'";
+                }
+            }
+        }
+
         private StreamReader reader;
         private readonly List<char> queue = new List<char>();
 

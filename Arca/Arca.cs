@@ -17,7 +17,7 @@ namespace Arca
 
             while (lexer.Current.Type != Lexing.Tokens.TokenType.EndOfInput)
             {
-                Console.WriteLine(lexer.Current.Value);
+                Console.WriteLine($"[{lexer.Current.Location}] {lexer.Current.Type}");
                 lexer.Next();
             }
         }

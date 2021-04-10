@@ -12,6 +12,8 @@ namespace Arca.Lexing.Tokens
         Identifier, Number, String,
         EndOfInput,
 
+        Indent, Dedent,
+
         True, False,
         Null
 
