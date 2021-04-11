@@ -11,6 +11,11 @@ namespace Arca.Parsing.Statements
     struct BlockTree
     {
 
+        public Location Location { get; }
+
+
+        public BlockTree(Location location) => Location = location;
+
     }
 
     class BlockParser : Parser<BlockTree>
@@ -37,8 +42,7 @@ namespace Arca.Parsing.Statements
             }
 
             Expect(TokenType.EndOfInput);
-
-            return new BlockTree();
+            return new BlockTree(Location);
         }
 
     }

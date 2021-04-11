@@ -165,8 +165,11 @@ namespace Arca.Lexing
             int indent = 0;
             while (CharacterUtil.IsWhitespace(stream.Current))
             {
+                // Count indentation
+                if (stream.Current == '\t') indent += 4;
+                else indent++;
+
                 stream.Next();
-                indent++; // Count indentation
             }
 
             if (CharacterUtil.IsNewLine(stream.Current))
