@@ -10,11 +10,13 @@ namespace Arca.Lexing.Constants
     class SymbolLexer
     {
 
-        private static readonly Constant[] symbols =
+        public static Dictionary<TokenType, string> Symbols { get; } = new Dictionary<TokenType, string>
         {
-            new Constant(TokenType.Add, "+"), new Constant(TokenType.Subtract, "-"),
-            new Constant(TokenType.Multiply, "*"), new Constant(TokenType.Divide, "/"),
-            new Constant(TokenType.Modulo, "%")
+            [TokenType.Add] = "+",
+            [TokenType.Subtract] = "-",
+            [TokenType.Multiply] = "*",
+            [TokenType.Dedent] = "/",
+            [TokenType.Modulo] = "%"
         };
 
 
@@ -29,7 +31,7 @@ namespace Arca.Lexing.Constants
             Location location = stream.Location;
 
             // Test each symbol until one is successful
-            foreach (Constant symbol in symbols)
+            foreach (KeyValuePair<TokenType, string> symbol in Symbols)
             {
                 for (int i = 0; i < symbol.Value.Length; i++)
                 {
@@ -39,7 +41,7 @@ namespace Arca.Lexing.Constants
 
                 // Move stream pointer to end of symbol
                 for (int i = 0; i < symbol.Value.Length; i++) stream.Next();
-                return new Token(symbol.Value, location, symbol.Type);
+                return new Token(symbol.Value, location, symbol.Key);
 
             Continue:;
             }

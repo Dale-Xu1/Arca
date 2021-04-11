@@ -11,10 +11,11 @@ namespace Arca.Lexing.Constants
     class KeywordLexer
     {
 
-        private static readonly Constant[] keywords =
+        public static Dictionary<TokenType, string> Keywords { get; } = new Dictionary<TokenType, string>
         {
-            new Constant(TokenType.True, "true"), new Constant(TokenType.False, "false"),
-            new Constant(TokenType.Null, "null")
+            [TokenType.True] = "true",
+            [TokenType.False] = "false",
+            [TokenType.Null] = "null"
         };
 
 
@@ -33,13 +34,13 @@ namespace Arca.Lexing.Constants
             string identifier = ((Token) token).Value;
 
             // Test if identifier matches with keyword
-            foreach (Constant keyword in keywords)
+            foreach (KeyValuePair<TokenType, string> keyword in Keywords)
             {
                 if (string.Equals(identifier, keyword.Value))
                 {
                     // Create keyword token
                     Location location = ((Token) token).Location;
-                    return new Token(identifier, location, keyword.Type);
+                    return new Token(identifier, location, keyword.Key);
                 }
             }
 

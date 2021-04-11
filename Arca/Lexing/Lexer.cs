@@ -16,7 +16,7 @@ namespace Arca.Lexing
 
         private readonly InputStream stream;
 
-        private readonly Stack<int> indents = new Stack<int>();
+        private readonly Stack<int> indents = new Stack<int>(new int[] { 0 });
         private readonly Queue<Token> queue = new Queue<Token>(); // Only used for indents and dedents
 
 
@@ -25,9 +25,7 @@ namespace Arca.Lexing
             this.stream = stream;
 
             // Initialize data
-            indents.Push(0);
             HandleIndentation();
-
             Next();
         }
 
@@ -40,7 +38,7 @@ namespace Arca.Lexing
                 stream.Next();
             }
 
-            Token? token = RunStateMachines();
+            Token? token = Run();
             if (token != null)
             {
                 // Token was successfully created
@@ -69,7 +67,7 @@ namespace Arca.Lexing
         }
 
 
-        private Token? RunStateMachines()
+        private Token? Run()
         {
         Queue:
             if (queue.Count > 0)
@@ -88,8 +86,7 @@ namespace Arca.Lexing
                 QueueDedents(0);
                 goto Queue;
             }
-            
-            if (CharacterUtil.IsNewLine(stream.Current))
+            else if (CharacterUtil.IsNewLine(stream.Current))
             {
                 // Output new line token
                 Token token = new Token(stream.Location, TokenType.NewLine);
@@ -100,6 +97,11 @@ namespace Arca.Lexing
             }
 
             // Run state machines if they can start
+            return RunStateMachines();
+        }
+
+        private Token? RunStateMachines()
+        {
             if (IdentifierMachine.CanStart(stream))
             {
                 IdentifierMachine machine = new IdentifierMachine(stream);
