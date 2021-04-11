@@ -21,11 +21,22 @@ namespace Arca.Parsing.Statements
 
         protected override BlockTree ParseTree()
         {
-            Expect(TokenType.Number);
-            Expect(TokenType.Add);
-            Expect(TokenType.Number);
-            Expect(TokenType.Multiply);
-            Expect(TokenType.Number);
+            Expect(TokenType.True);
+            Expect(TokenType.False);
+
+            Expect(TokenType.Indent);
+            while (!Match(TokenType.Dedent))
+            {
+                Expect(TokenType.Number);
+
+                if (!Match(TokenType.NewLine, TokenType.Semicolon))
+                {
+                    Expect(TokenType.Dedent);
+                    break;
+                }
+            }
+
+            Expect(TokenType.EndOfInput);
 
             return new BlockTree();
         }

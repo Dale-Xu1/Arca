@@ -30,7 +30,10 @@ namespace Arca.Lexing
         }
 
 
-        public void Next()
+        public void Next() => GetNext(true);
+        public void NextToken() => GetNext(false);
+
+        public void GetNext(bool indent)
         {
             // Skip whitespace
             while (CharacterUtil.IsWhitespace(stream.Current))
@@ -38,7 +41,7 @@ namespace Arca.Lexing
                 stream.Next();
             }
 
-            Token? token = Run();
+            Token? token = Run(indent);
             if (token != null)
             {
                 // Token was successfully created
@@ -52,7 +55,7 @@ namespace Arca.Lexing
 
             // Skip character and try again
             stream.Next();
-            Next();
+            GetNext(indent);
         }
 
         public bool Check(params TokenType[] types)
@@ -63,11 +66,18 @@ namespace Arca.Lexing
                 if (Current.Type == type) return true;
             }
 
+            // Check again if current was a new line
+            if (Current.Type == TokenType.NewLine)
+            {
+                Next();
+                return Check(types);
+            }
+
             return false;
         }
 
 
-        private Token? Run()
+        private Token? Run(bool indent)
         {
         Queue:
             if (queue.Count > 0)
@@ -92,7 +102,9 @@ namespace Arca.Lexing
                 Token token = new Token(stream.Location, TokenType.NewLine);
                 stream.Next();
 
-                HandleIndentation();
+                if (indent) HandleIndentation();
+                else GetIndentation(); // Skips adding indentation tokens
+
                 return token;
             }
 

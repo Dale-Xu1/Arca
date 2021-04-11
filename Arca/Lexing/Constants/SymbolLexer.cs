@@ -12,6 +12,8 @@ namespace Arca.Lexing.Constants
 
         public static Dictionary<TokenType, string> Symbols { get; } = new Dictionary<TokenType, string>
         {
+            [TokenType.Semicolon] = ";",
+
             [TokenType.Add] = "+",
             [TokenType.Subtract] = "-",
             [TokenType.Multiply] = "*",

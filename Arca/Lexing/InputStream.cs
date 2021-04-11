@@ -11,7 +11,7 @@ namespace Arca.Lexing
     {
 
         public char Current { get; private set; }
-        public Location Location { get; private set; } = new Location(1, 0);
+        public Location Location { get; private set; } = new Location(1, 1);
 
         public string CurrentFormatted
         {
@@ -73,7 +73,7 @@ namespace Arca.Lexing
             {
                 // Next line and reset column
                 line++;
-                col = 0;
+                col = 1;
             }
             else
             {

@@ -17,6 +17,8 @@ namespace Arca.Lexing.Tokens
         True, False,
         Null,
 
+        Semicolon,
+
         Add, Subtract,
         Multiply, Divide,
         Modulo
