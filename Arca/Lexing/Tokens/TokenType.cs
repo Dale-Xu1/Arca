@@ -19,9 +19,9 @@ namespace Arca.Lexing.Tokens
 
         Semicolon,
 
-        Add, Subtract,
-        Multiply, Divide,
-        Modulo
+        Plus, Minus,
+        Star, Slash,
+        Percent
 
     }
 }

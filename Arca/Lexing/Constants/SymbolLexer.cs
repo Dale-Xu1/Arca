@@ -14,11 +14,11 @@ namespace Arca.Lexing.Constants
         {
             [TokenType.Semicolon] = ";",
 
-            [TokenType.Add] = "+",
-            [TokenType.Subtract] = "-",
-            [TokenType.Multiply] = "*",
+            [TokenType.Plus] = "+",
+            [TokenType.Minus] = "-",
+            [TokenType.Star] = "*",
             [TokenType.Dedent] = "/",
-            [TokenType.Modulo] = "%"
+            [TokenType.Percent] = "%"
         };
 
 
