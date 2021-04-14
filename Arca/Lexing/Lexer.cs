@@ -24,30 +24,20 @@ namespace Arca.Lexing
         {
             this.stream = stream;
 
-            // Initialize data
             HandleIndentation();
             Next();
         }
 
 
-        public void Next() => GetNext(true);
-        public void NextToken() => GetNext(false);
-
-        public void GetNext(bool indent)
+        public void Next()
         {
-            // Skip whitespace
-            while (CharacterUtil.IsWhitespace(stream.Current))
-            {
-                stream.Next();
-            }
+            SkipWhitespace();
 
-            Token? token = Run(indent);
+            Token? token = Run();
             if (token != null)
             {
                 // Token was successfully created
                 Current = (Token) token;
-                Console.WriteLine($"[{Current.Location}] {Current.Type} {Current.Value}");
-
                 return;
             }
 
@@ -57,7 +47,7 @@ namespace Arca.Lexing
 
             // Skip character and try again
             stream.Next();
-            GetNext(indent);
+            Next();
         }
 
         public bool Check(params TokenType[] types)
@@ -68,25 +58,27 @@ namespace Arca.Lexing
                 if (Current.Type == type) return true;
             }
 
-            // Check again if current was a new line
-            if (Current.Type == TokenType.NewLine)
-            {
-                Next();
-                return Check(types);
-            }
-
             return false;
         }
 
 
-        private Token? Run(bool indent)
+        private Token? Run()
         {
-        Queue:
-            if (queue.Count > 0)
+            if (CharacterUtil.IsNewLine(stream.Current))
             {
-                // Deque if tokens exist in queue
-                return queue.Dequeue();
+                // Store location of new line
+                Location location = stream.Location;
+                stream.Next();
+
+                if (HandleIndentation())
+                {
+                    // New line if the indentation is the same
+                    return new Token(location, TokenType.NewLine);
+                }
             }
+
+            // Dequeue if tokens exist in queue
+            if (queue.Count > 0) return queue.Dequeue();
             else if (stream.Current == '\0')
             {
                 if (indents.Count == 1) // 1 because there is always a 0 as the first element
@@ -95,19 +87,8 @@ namespace Arca.Lexing
                     return new Token(stream.Location, TokenType.EndOfInput);
                 }
 
-                QueueDedents(0);
-                goto Queue;
-            }
-            else if (CharacterUtil.IsNewLine(stream.Current))
-            {
-                // Output new line token
-                Token token = new Token(stream.Location, TokenType.NewLine);
-                stream.Next();
-
-                if (indent) HandleIndentation();
-                else GetIndentation(); // Skips adding indentation tokens
-
-                return token;
+                QueueDedents();
+                return Run();
             }
 
             // Run state machines if they can start
@@ -139,20 +120,22 @@ namespace Arca.Lexing
         }
 
 
-        private void HandleIndentation()
+        private bool HandleIndentation()
         {
             int indent = GetIndentation();
+            if (indent == indents.Peek()) return true; // Nothing happens if indentation doesn't change
+
             QueueDedents(indent);
+            if (indent > indents.Peek())
+            {
+                indents.Push(indent);
+                queue.Enqueue(new Token(stream.Location, TokenType.Indent));
+            }
 
-            // Nothing happens if the indentation is the same
-            if (indent == indents.Peek()) return;
-
-            // Add indent
-            indents.Push(indent);
-            queue.Enqueue(new Token(stream.Location, TokenType.Indent));
+            return false;
         }
 
-        private void QueueDedents(int indent)
+        private void QueueDedents(int indent = 0)
         {
             while (indent < indents.Peek())
             {
@@ -164,21 +147,36 @@ namespace Arca.Lexing
 
         private int GetIndentation()
         {
+            int indent = SkipWhitespace();
+            if (CharacterUtil.IsNewLine(stream.Current)) // Recount if a new line is found
+            {
+                stream.Next();
+                return GetIndentation();
+            }
+
+            return indent;
+        }
+
+        private int SkipWhitespace()
+        {
             int indent = 0;
             while (CharacterUtil.IsWhitespace(stream.Current))
             {
                 // Count indentation
-                if (stream.Current == '\t') indent += 4;
+                if (stream.Current == '\t') indent += (4 - indent % 4); // Rounds to next multiple of 4
                 else indent++;
 
                 stream.Next();
             }
 
-            if (CharacterUtil.IsNewLine(stream.Current))
+            // Test if there is a comment
+            if (stream.Current == '/' && stream.Lookahead(1) == '/')
             {
-                // Recount if another new line is found
-                stream.Next();
-                return GetIndentation();
+                while (!CharacterUtil.IsNewLine(stream.Current) && stream.Current != '\0')
+                {
+                    // Skip everything until a new line or end of input is found
+                    stream.Next();
+                }
             }
 
             return indent;

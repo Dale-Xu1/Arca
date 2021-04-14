@@ -19,8 +19,14 @@ namespace Arca
             InputStream stream = new InputStream(file);
             Lexer lexer = new Lexer(stream);
 
-            BlockParser parser = new BlockParser(lexer);
-            parser.Parse();
+            while (lexer.Current.Type != Lexing.Tokens.TokenType.EndOfInput)
+            {
+                Console.WriteLine($"[{lexer.Current.Location}] {lexer.Current.Type} {lexer.Current.Value}");
+                lexer.Next();
+            }
+
+            //BlockParser parser = new BlockParser(lexer);
+            //parser.Parse();
         }
 
 

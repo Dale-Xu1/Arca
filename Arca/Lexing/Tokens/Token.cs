@@ -42,8 +42,6 @@ namespace Arca.Lexing.Tokens
                 // Keywords and symbols
                 default: return $"'{Value}'";
             }
-
-            return base.ToString();
         }
 
     }
