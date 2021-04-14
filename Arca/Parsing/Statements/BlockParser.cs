@@ -1,5 +1,6 @@
 ﻿using Arca.Lexing;
 using Arca.Lexing.Tokens;
+using Arca.Parsing.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,8 @@ namespace Arca.Parsing.Statements
             Expect(TokenType.Indent);
             while (!Match(TokenType.Dedent))
             {
-                Expect(TokenType.Number);
+                ExpressionParser parser = new ExpressionParser(Lexer);
+                parser.Parse();
 
                 if (!Match(TokenType.NewLine, TokenType.Semicolon))
                 {

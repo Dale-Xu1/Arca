@@ -46,6 +46,8 @@ namespace Arca.Lexing
             {
                 // Token was successfully created
                 Current = (Token) token;
+                Console.WriteLine($"[{Current.Location}] {Current.Type} {Current.Value}");
+
                 return;
             }
 
