@@ -30,18 +30,18 @@ namespace Arca.Parsing.Statements
             Expect(TokenType.True);
             Expect(TokenType.False);
 
-            Expect(TokenType.Indent);
-            while (!Match(TokenType.Dedent))
-            {
-                ExpressionParser parser = new ExpressionParser(Lexer);
-                parser.Parse();
+            //Expect(TokenType.Indent);
+            //while (!Match(TokenType.Dedent))
+            //{
+            //    ExpressionParser parser = new ExpressionParser(Lexer);
+            //    parser.Parse();
 
-                if (!Match(TokenType.NewLine, TokenType.Semicolon))
-                {
-                    Expect(TokenType.Dedent);
-                    break;
-                }
-            }
+            //    if (!Match(TokenType.NewLine, TokenType.Semicolon))
+            //    {
+            //        Expect(TokenType.Dedent);
+            //        break;
+            //    }
+            //}
 
             Expect(TokenType.EndOfInput);
             return new BlockTree(Location);

@@ -33,11 +33,7 @@ namespace Arca.Lexing.Tokens
                 case TokenType.Number: return $"number {Value}";
                 case TokenType.String: return $"string {Value}";
 
-                case TokenType.NewLine: return "new line";
                 case TokenType.EndOfInput: return "end of input";
-
-                case TokenType.Indent: return "indent";
-                case TokenType.Dedent: return "dedent";
 
                 // Keywords and symbols
                 default: return $"'{Value}'";

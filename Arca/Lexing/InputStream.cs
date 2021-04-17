@@ -75,10 +75,12 @@ namespace Arca.Lexing
                 line++;
                 col = 1;
             }
-            else
+            else if (Current == '\t')
             {
-                col++; // Next column
+                // Round to next multiple of 4
+                col += (5 - col % 4);
             }
+            else col++; // Next column
 
             if (queue.Count > 0)
             {

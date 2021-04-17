@@ -8,46 +8,30 @@ using System.Threading.Tasks;
 
 namespace Arca.Parsing.Expressions
 {
-    class ExpressionParser
+    struct Tree
     {
 
-        private readonly Lexer lexer;
+        public Location Location { get; }
 
 
-        public ExpressionParser(Lexer lexer) => this.lexer = lexer;
+        public Tree(Location location) => Location = location;
+
+    }
+
+    class ExpressionParser : Parser<Tree>
+    {
+
+        public ExpressionParser(Lexer lexer) : base(lexer) { }
 
 
-        public void Parse()
+        protected override Tree ParseTree()
         {
             Token a = Expect(TokenType.Number);
             Expect(TokenType.Plus);
             Token b = Expect(TokenType.Number);
 
             Console.WriteLine($"{a.Value} + {b.Value}");
-        }
-
-
-        private bool Match(params TokenType[] types)
-        {
-            bool result = lexer.Check(types);
-
-            // Move onto next token if successful
-            if (result) lexer.Next();
-            return result;
-        }
-
-        private Token Expect(params TokenType[] types)
-        {
-            bool result = lexer.Check(types);
-            Token token = lexer.Current;
-
-            if (result)
-            {
-                lexer.Next();
-                return token;
-            }
-
-            throw new ArcaException(token.Location, $"Unexpected {token}");
+            return new Tree(Location);
         }
 
     }

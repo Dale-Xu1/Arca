@@ -10,9 +10,7 @@ namespace Arca.Lexing.Tokens
     {
 
         Identifier, Number, String,
-        NewLine, EndOfInput,
-
-        Indent, Dedent,
+        EndOfInput,
 
         True, False,
         Null,
