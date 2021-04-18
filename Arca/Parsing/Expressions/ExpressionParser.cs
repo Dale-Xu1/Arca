@@ -1,4 +1,5 @@
 ﻿using Arca.Lexing;
+using Arca.Lexing.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,15 +8,26 @@ using System.Threading.Tasks;
 
 namespace Arca.Parsing.Expressions
 {
-    class ExpressionParser : Parser<SyntaxTree>
+    class ExpressionTree : SyntaxTree
+    {
+
+        public ExpressionTree(Location location) : base(location) { }
+
+
+        public override string ToString(int indent) => $"{Whitespace(indent)} expression";
+
+    }
+
+    class ExpressionParser : Parser<ExpressionTree>
     {
 
         public ExpressionParser(Lexer lexer) : base(lexer) { }
 
 
-        protected override SyntaxTree ParseTree(Location location)
+        protected override ExpressionTree ParseTree(Location location)
         {
-            throw new NotImplementedException();
+            Expect(TokenType.Int, TokenType.Float);
+            return new ExpressionTree(location);
         }
 
     }

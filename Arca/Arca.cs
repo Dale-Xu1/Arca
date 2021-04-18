@@ -26,18 +26,23 @@ namespace Arca
                 if (lexer.Current.Type == Lexing.Tokens.TokenType.EndOfInput) break;
                 lexer.Next();
             }
+            Console.WriteLine();
 
             BlockParser parser = new BlockParser(new Lexer(new InputStream(file)));
             BlockTree tree = parser.Parse();
+
+            Console.WriteLine(tree);
         }
 
 
         public static void Error(ArcaException exception)
         {
-            //if (panic) return;
-            //panic = true;
+            if (panic) Console.ForegroundColor = ConsoleColor.DarkRed;
+            else Console.ForegroundColor = ConsoleColor.Red;
 
-            Console.ForegroundColor = ConsoleColor.Red;
+            //if (panic) return;
+            panic = true;
+
             Console.Error.WriteLine($"[{exception.Location}] {exception.Message}");
             Console.ForegroundColor = ConsoleColor.Gray;
         }

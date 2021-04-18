@@ -11,6 +11,24 @@ namespace Arca.Parsing
     abstract class SyntaxTree
     {
 
+        public Location Location { get; }
+
+
+        protected SyntaxTree(Location location) => Location = location;
+
+
+        public override string ToString() => ToString(0);
+        public abstract string ToString(int indent);
+
+        protected string Whitespace(int indent)
+        {
+            // Create whitespace characters
+            string whitespace = "";
+            for (int i = 0; i < indent; i++) whitespace += "    ";
+
+            return $"{whitespace}[{Location}]";
+        }
+
     }
 
     abstract class Parser<T> where T : SyntaxTree

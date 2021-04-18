@@ -1,5 +1,5 @@
 ﻿using Arca.Lexing;
-using Arca.Lexing.Tokens;
+using Arca.Parsing.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +11,26 @@ namespace Arca.Parsing.Statements
     class BlockTree : SyntaxTree
     {
 
-        public Location Location { get; }
         public SyntaxTree[] Statements { get; }
 
 
-        public BlockTree(Location location, SyntaxTree[] statements)
+        public BlockTree(Location location, SyntaxTree[] statements) : base(location) => Statements = statements;
+
+
+        public override string ToString(int indent)
         {
-            Location = location;
-            Statements = statements;
+            StringBuilder builder = new StringBuilder();
+
+            for (int i = 0; i < Statements.Length; i++)
+            {
+                SyntaxTree statement = Statements[i];
+                builder.Append(statement.ToString(indent));
+
+                // Add new line unless it's the last element
+                if (i < Statements.Length - 1) builder.Append('\n');
+            }
+
+            return builder.ToString();
         }
 
     }
@@ -31,14 +43,7 @@ namespace Arca.Parsing.Statements
 
         protected override SyntaxTree ParseTree()
         {
-            if (Match(TokenType.True))
-            {
-                ExpectNewLine();
-                return new BlockParser(Lexer).Parse();
-            }
-            
-            Expect(TokenType.False);
-            return null;
+            return new ExpressionParser(Lexer).Parse();
         }
 
         protected override BlockTree CreateTree(Location location, SyntaxTree[] statements) => new BlockTree(location, statements);

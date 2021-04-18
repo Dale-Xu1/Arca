@@ -28,10 +28,14 @@ namespace Arca.Parsing
             while (ExpectIndent())
             {
                 // Parse and save trees
-                S tree = ParseTree();
-                trees.Add(tree);
+                S tree = HandleTree();
 
-                ExpectEnd();
+                if (tree == null) Synchronize();
+                else
+                {
+                    ExpectEnd();
+                    trees.Add(tree);
+                }
             }
 
             // Restore indentation
@@ -41,6 +45,8 @@ namespace Arca.Parsing
 
         protected abstract S ParseTree();
         protected abstract T CreateTree(Location location, S[] trees);
+
+        protected bool CanStart() => false;
 
 
         private void InitializeIndent()
@@ -84,6 +90,21 @@ namespace Arca.Parsing
             return (indent == Lexer.Indent);
         }
 
+
+        private S HandleTree()
+        {
+            try
+            {
+                S tree = ParseTree();
+                return tree;
+            }
+            catch (ArcaException exception)
+            {
+                Arca.Error(exception);
+                return null;
+            }
+        }
+
         private void ExpectEnd()
         {
             // Make sure statements are deliminated
@@ -91,10 +112,49 @@ namespace Arca.Parsing
             {
                 if (!Match(TokenType.Semicolon))
                 {
-                    Arca.Error(new ArcaException(Lexer.Location, "Expected semicolon"));
+                    throw new ArcaException(Lexer.Location, "Expected semicolon");
                 }
                 else if (!Lexer.NewLine) ignoreIndent = true; // Indentation can be ignored for the next statement
             }
+        }
+
+
+        private void Synchronize()
+        {
+            // New line means end of statement, so the lexer is synchronized
+            if (Lexer.NewLine)
+            {
+                Arca.Synchronize();
+                return;
+            }
+
+            switch (Lexer.Current.Type)
+            {
+                case TokenType.EndOfInput: break;
+                case TokenType.Semicolon:
+                {
+                    // Skip semicolon
+                    Lexer.Next();
+                    break;
+                }
+
+                default:
+                {
+                    if (CanStart()) break;
+                    else
+                    {
+                        // Synchronize again for next token
+                        Lexer.Next();
+                        Synchronize();
+
+                        return;
+                    }
+                }
+            }
+
+            // Ignore indentation because we know the next token is on the same line
+            ignoreIndent = true;
+            Arca.Synchronize();
         }
 
     }
