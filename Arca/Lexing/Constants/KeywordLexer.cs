@@ -11,7 +11,7 @@ namespace Arca.Lexing.Constants
     class KeywordLexer
     {
 
-        public static Dictionary<TokenType, string> Keywords { get; } = new Dictionary<TokenType, string>
+        private static readonly Dictionary<TokenType, string> keywords = new Dictionary<TokenType, string>
         {
             [TokenType.True] = "true",
             [TokenType.False] = "false",
@@ -34,7 +34,7 @@ namespace Arca.Lexing.Constants
             string identifier = ((Token) token).Value;
 
             // Test if identifier matches with keyword
-            foreach (KeyValuePair<TokenType, string> keyword in Keywords)
+            foreach (KeyValuePair<TokenType, string> keyword in keywords)
             {
                 if (string.Equals(identifier, keyword.Value))
                 {

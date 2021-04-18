@@ -27,14 +27,18 @@ namespace Arca.Parsing
             InitializeIndent();
             while (ExpectIndent())
             {
-                // Parse and save trees
-                S tree = HandleTree();
-
-                if (tree == null) Synchronize();
-                else
+                try
                 {
+                    // Parse and save trees
+                    S tree = ParseTree();
                     ExpectEnd();
+
                     trees.Add(tree);
+                }
+                catch (ArcaException exception)
+                {
+                    Arca.Error(exception);
+                    Synchronize();
                 }
             }
 
@@ -46,7 +50,7 @@ namespace Arca.Parsing
         protected abstract S ParseTree();
         protected abstract T CreateTree(Location location, S[] trees);
 
-        protected bool CanStart() => false;
+        protected virtual bool CanStart() => false;
 
 
         private void InitializeIndent()
@@ -88,21 +92,6 @@ namespace Arca.Parsing
             }
 
             return (indent == Lexer.Indent);
-        }
-
-
-        private S HandleTree()
-        {
-            try
-            {
-                S tree = ParseTree();
-                return tree;
-            }
-            catch (ArcaException exception)
-            {
-                Arca.Error(exception);
-                return null;
-            }
         }
 
         private void ExpectEnd()

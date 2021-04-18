@@ -20,7 +20,7 @@ namespace Arca.Parsing
         public override string ToString() => ToString(0);
         public abstract string ToString(int indent);
 
-        protected string Whitespace(int indent)
+        protected string Whitespace(int indent = 0)
         {
             // Create whitespace characters
             string whitespace = "";
@@ -46,18 +46,7 @@ namespace Arca.Parsing
         }
 
 
-        public T Parse()
-        {
-            try
-            {
-                return ParseTree(location);
-            }
-            catch (ArcaException exception)
-            {
-                Arca.Error(exception);
-                return null;
-            }
-        }
+        public T Parse() => ParseTree(location);
 
         protected abstract T ParseTree(Location location);
 

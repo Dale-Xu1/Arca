@@ -1,4 +1,5 @@
 ﻿using Arca.Lexing;
+using Arca.Lexing.Constants;
 using Arca.Lexing.Tokens;
 using System;
 using System.Collections.Generic;
@@ -8,26 +9,51 @@ using System.Threading.Tasks;
 
 namespace Arca.Parsing.Expressions
 {
-    class ExpressionTree : SyntaxTree
+    class ValueTree : SyntaxTree
     {
 
-        public ExpressionTree(Location location) : base(location) { }
+        public double Value { get; }
 
 
-        public override string ToString(int indent) => $"{Whitespace(indent)} expression";
+        public ValueTree(Location location, double value) : base(location) => Value = value;
+
+
+        public override string ToString(int indent) => $"{Whitespace()} {Value}";
 
     }
 
-    class ExpressionParser : Parser<ExpressionTree>
+    class UnaryTree : SyntaxTree
+    {
+
+        public SyntaxTree Expression { get; }
+        public TokenType Operation { get; }
+
+
+        public UnaryTree(Location location, SyntaxTree expression, TokenType operation) : base(location)
+        {
+            Expression = expression;
+            Operation = operation;
+        }
+
+
+        public override string ToString(int indent)
+        {
+            string symbol = SymbolLexer.Symbols[Operation];
+            return $"{Whitespace(indent)} {symbol}({Expression})";
+        }
+
+    }
+
+    class ExpressionParser : Parser<SyntaxTree>
     {
 
         public ExpressionParser(Lexer lexer) : base(lexer) { }
 
 
-        protected override ExpressionTree ParseTree(Location location)
+        protected override SyntaxTree ParseTree(Location location)
         {
-            Expect(TokenType.Int, TokenType.Float);
-            return new ExpressionTree(location);
+            Token token = Expect(TokenType.Int, TokenType.Float);
+            return new ValueTree(location, double.Parse(token.Value));
         }
 
     }

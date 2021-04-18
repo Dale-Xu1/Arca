@@ -1,5 +1,4 @@
 ﻿using Arca.Lexing;
-using Arca.Parsing.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,12 +40,11 @@ namespace Arca.Parsing.Statements
         public BlockParser(Lexer lexer) : base(lexer) { }
 
 
-        protected override SyntaxTree ParseTree()
-        {
-            return new ExpressionParser(Lexer).Parse();
-        }
+        protected override SyntaxTree ParseTree() => new StatementParser(Lexer).Parse();
 
         protected override BlockTree CreateTree(Location location, SyntaxTree[] statements) => new BlockTree(location, statements);
+
+        protected override bool CanStart() => StatementParser.CanStart(Lexer);
 
     }
 }

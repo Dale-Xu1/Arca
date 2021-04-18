@@ -58,11 +58,13 @@
     <Compile Include="Lexing\StateMachines\StateMachine.cs" />
     <Compile Include="Lexing\StateMachines\StringMachine.cs" />
     <Compile Include="Parsing\Expressions\ExpressionParser.cs" />
+    <Compile Include="Parsing\Expressions\LiteralParser.cs" />
     <Compile Include="Parsing\StackParser.cs" />
     <Compile Include="Parsing\Statements\BlockParser.cs" />
     <Compile Include="Lexing\Tokens\Token.cs" />
     <Compile Include="Lexing\Tokens\TokenType.cs" />
     <Compile Include="Parsing\Parser.cs" />
+    <Compile Include="Parsing\Statements\StatementParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
