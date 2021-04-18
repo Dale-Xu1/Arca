@@ -34,8 +34,8 @@ namespace Arca
 
         public static void Error(ArcaException exception)
         {
-            if (panic) return;
-            panic = true;
+            //if (panic) return;
+            //panic = true;
 
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Error.WriteLine($"[{exception.Location}] {exception.Message}");

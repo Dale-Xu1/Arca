@@ -28,7 +28,7 @@ namespace Arca.Parsing
         }
 
 
-        public virtual T Parse()
+        public T Parse()
         {
             try
             {

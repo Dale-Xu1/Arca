@@ -14,41 +14,30 @@ namespace Arca.Parsing
     {
 
         private readonly List<S> trees = new List<S>();
-        private readonly Location location;
 
         private int previousIndent;
         private bool ignoreIndent = false;
 
 
-        protected StackParser(Lexer lexer) : base(lexer) => location = lexer.Current.Location;
+        protected StackParser(Lexer lexer) : base(lexer) { }
 
 
-        public override T Parse()
+        protected override T ParseTree(Location location)
         {
-            try
+            InitializeIndent();
+            while (ExpectIndent())
             {
-                InitializeIndent();
-                while (ExpectIndent())
-                {
-                    // Parse and save trees
-                    S tree = ParseTree();
-                    trees.Add(tree);
+                // Parse and save trees
+                S tree = ParseTree();
+                trees.Add(tree);
 
-                    ExpectEnd();
-                }
+                ExpectEnd();
+            }
 
-                // Restore indentation
-                Lexer.Indent = previousIndent;
-                return CreateTree(location, trees.ToArray());
-            }
-            catch (ArcaException exception)
-            {
-                Arca.Error(exception);
-                return null;
-            }
+            // Restore indentation
+            Lexer.Indent = previousIndent;
+            return CreateTree(location, trees.ToArray());
         }
-
-        protected override T ParseTree(Location location) => throw new NotImplementedException();
 
         protected abstract S ParseTree();
         protected abstract T CreateTree(Location location, S[] trees);
