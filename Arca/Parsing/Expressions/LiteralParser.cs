@@ -41,24 +41,39 @@ namespace Arca.Parsing.Expressions
         {
             switch (Lexer.Current.Type)
             {
-                case TokenType.Int:
-                {
-                    int value = int.Parse(Lexer.Current.Value);
-                    Lexer.Next();
+                case TokenType.Int: return ParseInt(location);
+                case TokenType.Float: return ParseFloat(location);
 
-                    return new IntTree(location, value);
-                }
-
-                case TokenType.Float:
-                {
-                    double value = double.Parse(Lexer.Current.Value);
-                    Lexer.Next();
-
-                    return new FloatTree(location, value);
-                }
+                case TokenType.ParenOpen: return ParseGroup();
             }
 
             return null;
+        }
+
+
+        private IntTree ParseInt(Location location)
+        {
+            int value = int.Parse(Lexer.Current.Value);
+            Lexer.Next();
+
+            return new IntTree(location, value);
+        }
+
+        private FloatTree ParseFloat(Location location)
+        {
+            double value = double.Parse(Lexer.Current.Value);
+            Lexer.Next();
+
+            return new FloatTree(location, value);
+        }
+
+        private SyntaxTree ParseGroup()
+        {
+            Lexer.Next();
+            SyntaxTree expression = new ExpressionParser(Lexer).Parse();
+
+            Expect(TokenType.ParenClose);
+            return expression;
         }
 
     }
