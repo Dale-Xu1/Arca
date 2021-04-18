@@ -62,7 +62,7 @@ namespace Arca.Parsing
             Location location = Lexer.Location;
             int indent = location.Col;
 
-            if (indent <= previousIndent)
+            if (indent <= previousIndent || Lexer.Check(TokenType.EndOfInput))
             {
                 // Indentation must increase
                 throw new ArcaException(location, "Expected indent");
