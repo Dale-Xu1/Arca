@@ -21,7 +21,7 @@ namespace Arca.Lexing.StateMachines
         public static bool CanStart(InputStream stream) => (stream.Current == '"');
 
 
-        public StringMachine(InputStream stream) : base(stream, State.Start, TokenType.String) { }
+        public StringMachine(InputStream stream) : base(stream, State.Start) { }
 
 
         protected override State? Next(State state, char current)
@@ -56,7 +56,11 @@ namespace Arca.Lexing.StateMachines
             return null;
         }
 
-        protected override bool IsSuccess(State state) => (state == State.End);
+        protected override Token? CreateToken(State state, string value, Location location)
+        {
+            if (state != State.End) return null;
+            return new Token(value, location, TokenType.String);
+        }
 
     }
 }

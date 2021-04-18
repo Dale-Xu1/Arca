@@ -14,16 +14,14 @@ namespace Arca.Lexing.StateMachines
         private readonly T start;
 
         private readonly Location location;
-        private readonly TokenType type;
 
 
-        protected StateMachine(InputStream stream, T start, TokenType type)
+        protected StateMachine(InputStream stream, T start)
         {
             this.stream = stream;
             this.start = start;
 
             location = stream.Location;
-            this.type = type;
         }
 
 
@@ -48,15 +46,13 @@ namespace Arca.Lexing.StateMachines
                 state = (T) next;
             }
 
-            // Ask implementation whether run was successful
-            if (IsSuccess(state)) return new Token(builder.ToString(), location, type);
-            return null;
+            return CreateToken(state, builder.ToString(), location);
         }
 
 
         protected abstract T? Next(T state, char current);
 
-        protected abstract bool IsSuccess(T state);
+        protected abstract Token? CreateToken(T state, string value, Location location);
 
     }
 }

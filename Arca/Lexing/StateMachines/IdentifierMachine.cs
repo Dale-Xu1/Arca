@@ -19,7 +19,7 @@ namespace Arca.Lexing.StateMachines
         public static bool CanStart(InputStream stream) => CharacterUtil.IsIdentifier(stream.Current);
 
 
-        public IdentifierMachine(InputStream stream) : base(stream, State.Start, TokenType.Identifier) { }
+        public IdentifierMachine(InputStream stream) : base(stream, State.Start) { }
 
 
         protected override State? Next(State state, char current)
@@ -44,7 +44,11 @@ namespace Arca.Lexing.StateMachines
             return null;
         }
 
-        protected override bool IsSuccess(State state) => (state == State.Rest);
+        protected override Token? CreateToken(State state, string value, Location location)
+        {
+            if (state != State.Rest) return null;
+            return new Token(value, location, TokenType.Identifier);
+        }
 
     }
 }

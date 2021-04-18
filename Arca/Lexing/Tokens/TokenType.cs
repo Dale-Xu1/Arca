@@ -9,7 +9,7 @@ namespace Arca.Lexing.Tokens
     enum TokenType
     {
 
-        Identifier, Number, String,
+        Identifier, Int, Float, String,
         EndOfInput,
 
         True, False,
@@ -19,7 +19,8 @@ namespace Arca.Lexing.Tokens
 
         Plus, Minus,
         Star, Slash,
-        Percent
+        Percent,
+        Not, Or, And
 
     }
 }

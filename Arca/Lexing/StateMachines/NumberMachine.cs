@@ -31,7 +31,10 @@ namespace Arca.Lexing.StateMachines
         }
 
 
-        public NumberMachine(InputStream stream) : base(stream, State.StartDigit, TokenType.Number) { }
+        private bool isFloat = false;
+
+
+        public NumberMachine(InputStream stream) : base(stream, State.StartDigit) { }
 
 
         protected override State? Next(State state, char current)
@@ -59,6 +62,8 @@ namespace Arca.Lexing.StateMachines
 
                 case State.StartDecimal:
                 {
+                    isFloat = true;
+
                     // Decimals must start with at least one digit
                     if (CharacterUtil.IsDigit(current)) return State.Decimal;
                     break;
@@ -75,6 +80,8 @@ namespace Arca.Lexing.StateMachines
 
                 case State.Exponent:
                 {
+                    isFloat = true;
+
                     // Can immediately start remaining numbers or specify exponent sign
                     if (CharacterUtil.IsDigit(current)) return State.Rest;
                     else if (current == '+' || current == '-') return State.StartRest;
@@ -94,7 +101,16 @@ namespace Arca.Lexing.StateMachines
             return null;
         }
 
-        protected override bool IsSuccess(State state) => ((state == State.Digit) || (state == State.Decimal) || (state == State.Rest));
+        protected override Token? CreateToken(State state, string value, Location location)
+        {
+            if ((state == State.Digit) || (state == State.Decimal) || (state == State.Rest))
+            {
+                TokenType type = isFloat ? TokenType.Float : TokenType.Int;
+                return new Token(value, location, type);
+            }
+
+            return null;
+        }
 
     }
 }

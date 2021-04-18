@@ -30,7 +30,8 @@ namespace Arca.Lexing.Tokens
             switch (Type)
             {
                 case TokenType.Identifier: return $"identifier '{Value}'";
-                case TokenType.Number: return $"number {Value}";
+                case TokenType.Int:
+                case TokenType.Float: return $"number {Value}";
                 case TokenType.String: return $"string {Value}";
 
                 case TokenType.EndOfInput: return "end of input";

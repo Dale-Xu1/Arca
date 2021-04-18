@@ -18,7 +18,11 @@ namespace Arca.Lexing.Constants
             [TokenType.Minus] = "-",
             [TokenType.Star] = "*",
             [TokenType.Slash] = "/",
-            [TokenType.Percent] = "%"
+            [TokenType.Percent] = "%",
+
+            [TokenType.Not] = "!",
+            [TokenType.Or] = "||",
+            [TokenType.And] = "&&"
         };
 
 
