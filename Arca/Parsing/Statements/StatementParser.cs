@@ -24,7 +24,7 @@ namespace Arca.Parsing.Statements
     class StatementParser : Parser<SyntaxTree>
     {
 
-        public static bool CanStart(Lexer lexer) => false;
+        public static bool CanStart(Lexer lexer) => IfParser.CanStart(lexer);
 
 
         public StatementParser(Lexer lexer) : base(lexer) { }
@@ -32,6 +32,8 @@ namespace Arca.Parsing.Statements
 
         protected override SyntaxTree ParseTree(Location location)
         {
+            if (IfParser.CanStart(Lexer)) return new IfParser(Lexer).Parse();
+
             SyntaxTree expression = new ExpressionParser(Lexer).Parse();
             return new ExpressionTree(location, expression);
         }

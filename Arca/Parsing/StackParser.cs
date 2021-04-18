@@ -108,10 +108,10 @@ namespace Arca.Parsing
         }
 
 
-        private void Synchronize()
+        private void Synchronize(bool initial = true)
         {
             // New line means end of statement, so the lexer is synchronized
-            if (Lexer.NewLine)
+            if (Lexer.NewLine && !initial)
             {
                 Arca.Synchronize();
                 return;
@@ -134,7 +134,7 @@ namespace Arca.Parsing
                     {
                         // Synchronize again for next token
                         Lexer.Next();
-                        Synchronize();
+                        Synchronize(false);
 
                         return;
                     }

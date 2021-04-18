@@ -69,6 +69,7 @@
     <Compile Include="Lexing\Tokens\Token.cs" />
     <Compile Include="Lexing\Tokens\TokenType.cs" />
     <Compile Include="Parsing\Parser.cs" />
+    <Compile Include="Parsing\Statements\IfParser.cs" />
     <Compile Include="Parsing\Statements\StatementParser.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
