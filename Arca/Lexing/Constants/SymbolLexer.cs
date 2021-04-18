@@ -12,17 +12,29 @@ namespace Arca.Lexing.Constants
 
         public static Dictionary<TokenType, string> Symbols { get; } = new Dictionary<TokenType, string>
         {
+            [TokenType.Equal] = "=",
+            [TokenType.Dot] = ".",
+            [TokenType.Comma] = ",",
+            [TokenType.Colon] = ":",
             [TokenType.Semicolon] = ";",
+            [TokenType.ParenOpen] = "(",
+            [TokenType.ParenClose] = ")",
 
             [TokenType.Plus] = "+",
             [TokenType.Minus] = "-",
             [TokenType.Star] = "*",
             [TokenType.Slash] = "/",
             [TokenType.Percent] = "%",
-
             [TokenType.Not] = "!",
             [TokenType.Or] = "||",
-            [TokenType.And] = "&&"
+            [TokenType.And] = "&&",
+
+            [TokenType.IsEqual] = "==",
+            [TokenType.NotEqual] = "!=",
+            [TokenType.Less] = "<",
+            [TokenType.LessEqual] = "<=",
+            [TokenType.Greater] = ">",
+            [TokenType.GreaterEqual] = ">="
         };
 
 

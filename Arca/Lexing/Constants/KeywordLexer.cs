@@ -15,7 +15,16 @@ namespace Arca.Lexing.Constants
         {
             [TokenType.True] = "true",
             [TokenType.False] = "false",
-            [TokenType.Null] = "null"
+            [TokenType.Null] = "null",
+
+            [TokenType.If] = "if",
+            [TokenType.Then] = "then",
+            [TokenType.Else] = "else",
+            [TokenType.While] = "while",
+            [TokenType.For] = "for",
+
+            [TokenType.Class] = "class",
+            [TokenType.Function] = "function",
         };
 
 

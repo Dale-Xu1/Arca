@@ -9,19 +9,6 @@ using System.Threading.Tasks;
 
 namespace Arca.Parsing.Expressions
 {
-    class ValueTree : SyntaxTree
-    {
-
-        public double Value { get; }
-
-
-        public ValueTree(Location location, double value) : base(location) => Value = value;
-
-
-        public override string ToString(int indent) => $"{Whitespace()} {Value}";
-
-    }
-
     class UnaryTree : SyntaxTree
     {
 
@@ -52,8 +39,10 @@ namespace Arca.Parsing.Expressions
 
         protected override SyntaxTree ParseTree(Location location)
         {
-            Token token = Expect(TokenType.Int, TokenType.Float);
-            return new ValueTree(location, double.Parse(token.Value));
+            SyntaxTree expression = new LiteralParser(Lexer).Parse();
+
+            if (expression == null) throw new ArcaException(location, "I dunno");
+            return expression;
         }
 
     }

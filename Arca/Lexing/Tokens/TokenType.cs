@@ -15,12 +15,24 @@ namespace Arca.Lexing.Tokens
         True, False,
         Null,
 
-        Semicolon,
+        If, Then, Else,
+        While, For,
+
+        Class, Function,
+
+        Equal,
+        Dot, Comma,
+        Colon, Semicolon,
+        ParenOpen, ParenClose,
 
         Plus, Minus,
         Star, Slash,
         Percent,
-        Not, Or, And
+        Not, Or, And,
+
+        IsEqual, NotEqual,
+        Less, LessEqual,
+        Greater, GreaterEqual
 
     }
 }
