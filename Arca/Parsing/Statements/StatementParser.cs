@@ -17,7 +17,7 @@ namespace Arca.Parsing.Statements
         public ExpressionTree(Location location, SyntaxTree expression) : base(location) => Expression = expression;
 
 
-        public override string ToString(int indent) => $"{Whitespace(indent)} {Expression}";
+        public override string ToString(int indent) => $"{Whitespace(indent)}{Expression}";
 
     }
 

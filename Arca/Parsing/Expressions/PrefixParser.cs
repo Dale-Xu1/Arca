@@ -26,12 +26,12 @@ namespace Arca.Parsing.Expressions
         public override string ToString(int indent)
         {
             string symbol = SymbolLexer.Symbols[Operation];
-            return $"{Whitespace(indent)} {symbol}({Expression})";
+            return $"{Whitespace(indent)}{symbol}({Expression})";
         }
 
     }
 
-    class UnaryParser : Parser<SyntaxTree>
+    class PrefixParser : Parser<UnaryTree>
     {
 
         private static readonly TokenType[] operations =
@@ -41,16 +41,16 @@ namespace Arca.Parsing.Expressions
         };
 
 
-        public UnaryParser(Lexer lexer) : base(lexer) { }
+        public PrefixParser(Lexer lexer) : base(lexer) { }
 
 
-        protected override SyntaxTree ParseTree(Location location)
+        protected override UnaryTree ParseTree(Location location)
         {
             TokenType operation = Lexer.Current.Type;
             if (Match(operations))
             {
                 // Parse expression and wrap in unary operation
-                SyntaxTree expression = new ExpressionParser(Lexer).Parse();
+                SyntaxTree expression = new ExpressionParser(Lexer, Precedence.Prefix).Parse();
                 return new UnaryTree(location, expression, operation);
             }
 

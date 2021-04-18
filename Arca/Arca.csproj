@@ -57,9 +57,10 @@
     <Compile Include="Lexing\StateMachines\NumberMachine.cs" />
     <Compile Include="Lexing\StateMachines\StateMachine.cs" />
     <Compile Include="Lexing\StateMachines\StringMachine.cs" />
+    <Compile Include="Parsing\Expressions\InfixParser.cs" />
     <Compile Include="Parsing\Expressions\ExpressionParser.cs" />
     <Compile Include="Parsing\Expressions\LiteralParser.cs" />
-    <Compile Include="Parsing\Expressions\UnaryParser.cs" />
+    <Compile Include="Parsing\Expressions\PrefixParser.cs" />
     <Compile Include="Parsing\StackParser.cs" />
     <Compile Include="Parsing\Statements\BlockParser.cs" />
     <Compile Include="Lexing\Tokens\Token.cs" />

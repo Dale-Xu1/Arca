@@ -11,6 +11,9 @@ namespace Arca.Parsing
     abstract class SyntaxTree
     {
 
+        private static readonly bool location = false;
+
+
         public Location Location { get; }
 
 
@@ -26,7 +29,8 @@ namespace Arca.Parsing
             string whitespace = "";
             for (int i = 0; i < indent; i++) whitespace += "    ";
 
-            return $"{whitespace}[{Location}]";
+            if (location) return $"{whitespace}[{Location}] ";
+            else return whitespace;
         }
 
     }
@@ -42,7 +46,7 @@ namespace Arca.Parsing
         protected Parser(Lexer lexer)
         {
             Lexer = lexer;
-            location = lexer.Current.Location;
+            location = lexer.Location;
         }
 
 
