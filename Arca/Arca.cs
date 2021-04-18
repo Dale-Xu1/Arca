@@ -28,7 +28,7 @@ namespace Arca
             }
 
             BlockParser parser = new BlockParser(new Lexer(new InputStream(file)));
-            parser.Parse();
+            BlockTree tree = parser.Parse();
         }
 
 

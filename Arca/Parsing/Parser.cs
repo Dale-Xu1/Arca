@@ -8,25 +8,31 @@ using System.Threading.Tasks;
 
 namespace Arca.Parsing
 {
-    abstract class Parser<T> where T : struct
+    abstract class SyntaxTree
+    {
+
+    }
+
+    abstract class Parser<T> where T : SyntaxTree
     {
 
         protected Lexer Lexer { get; }
-        protected Location Location { get; }
+
+        private readonly Location location;
 
 
-        public Parser(Lexer lexer)
+        protected Parser(Lexer lexer)
         {
             Lexer = lexer;
-            Location = lexer.Current.Location;
+            location = lexer.Current.Location;
         }
 
 
-        public T? Parse()
+        public virtual T Parse()
         {
             try
             {
-                return ParseTree();
+                return ParseTree(location);
             }
             catch (ArcaException exception)
             {
@@ -35,7 +41,7 @@ namespace Arca.Parsing
             }
         }
 
-        protected abstract T ParseTree();
+        protected abstract T ParseTree(Location location);
 
 
         protected bool Match(params TokenType[] types)
@@ -49,16 +55,17 @@ namespace Arca.Parsing
 
         protected Token Expect(params TokenType[] types)
         {
-            bool result = Lexer.Check(types);
             Token token = Lexer.Current;
 
-            if (result)
-            {
-                Lexer.Next();
-                return token;
-            }
-
+            // Same as match, but throws an error
+            if (Match(types)) return token;
             throw new ArcaException(token.Location, $"Unexpected {token}");
+        }
+
+        protected void ExpectNewLine()
+        {
+            // Throws error if new line is not found
+            if (!Lexer.NewLine) throw new ArcaException(Lexer.Location, "Expected new line");
         }
 
     }

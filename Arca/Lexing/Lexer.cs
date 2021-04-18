@@ -13,7 +13,10 @@ namespace Arca.Lexing
     {
 
         public Token Current { get; private set; }
+        public Location Location => Current.Location;
+
         public bool NewLine { get; private set; } // If current token is on a new line
+        public int Indent { get; set; } = 0;
 
         private readonly InputStream stream;
 

@@ -1,6 +1,5 @@
 ﻿using Arca.Lexing;
 using Arca.Lexing.Tokens;
-using Arca.Parsing.Expressions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,43 +8,40 @@ using System.Threading.Tasks;
 
 namespace Arca.Parsing.Statements
 {
-    struct BlockTree
+    class BlockTree : SyntaxTree
     {
 
         public Location Location { get; }
+        public SyntaxTree[] Statements { get; }
 
 
-        public BlockTree(Location location) => Location = location;
+        public BlockTree(Location location, SyntaxTree[] statements)
+        {
+            Location = location;
+            Statements = statements;
+        }
 
     }
 
-    class BlockParser : Parser<BlockTree>
+    class BlockParser : StackParser<BlockTree, SyntaxTree>
     {
 
         public BlockParser(Lexer lexer) : base(lexer) { }
 
 
-        protected override BlockTree ParseTree()
+        protected override SyntaxTree ParseTree()
         {
-            Expect(TokenType.True);
+            if (Match(TokenType.True))
+            {
+                ExpectNewLine();
+                return new BlockParser(Lexer).Parse();
+            }
+            
             Expect(TokenType.False);
-
-            //Expect(TokenType.Indent);
-            //while (!Match(TokenType.Dedent))
-            //{
-            //    ExpressionParser parser = new ExpressionParser(Lexer);
-            //    parser.Parse();
-
-            //    if (!Match(TokenType.NewLine, TokenType.Semicolon))
-            //    {
-            //        Expect(TokenType.Dedent);
-            //        break;
-            //    }
-            //}
-
-            Expect(TokenType.EndOfInput);
-            return new BlockTree(Location);
+            return null;
         }
+
+        protected override BlockTree CreateTree(Location location, SyntaxTree[] statements) => new BlockTree(location, statements);
 
     }
 }
