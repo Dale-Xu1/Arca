@@ -29,26 +29,8 @@ namespace Arca.Parsing.Expressions
         public override string ToString(int indent)
         {
             string symbol = SymbolLexer.Symbols[Operation];
-            return $"{Whitespace()}({Left}) {symbol} ({Right})";
+            return $"{Whitespace()}({Left} {symbol} {Right})";
         }
-
-    }
-
-    class AssignmentTree : SyntaxTree
-    {
-
-        public SyntaxTree Target { get; }
-        public SyntaxTree Expression { get; }
-
-
-        public AssignmentTree(Location location, SyntaxTree target, SyntaxTree expression) : base(location)
-        {
-            Target = target;
-            Expression = expression;
-        }
-
-
-        public override string ToString(int indent) => $"{Whitespace()}({Target}) = ({Expression})";
 
     }
 
@@ -103,34 +85,18 @@ namespace Arca.Parsing.Expressions
             if (precedence < basePrecedence) return null; // Next operator's precedence is too low
 
             // Handle special cases
-            Lexer.Next();
             switch (operation)
             {
-                case TokenType.Equal: return ParseAssignment(location, precedence);
-                case TokenType.Dot: break;
-                case TokenType.ParenOpen: break;
+                case TokenType.Equal: return new AssignmentParser(Lexer, left).Parse();
+                case TokenType.Dot: return new MemberParser(Lexer, left).Parse();
+                case TokenType.ParenOpen: break; // TODO: Calls
             }
 
             // Create binary tree
+            Lexer.Next();
             SyntaxTree right = new ExpressionParser(Lexer, precedence + 1).Parse();
+
             return new BinaryTree(location, left, right, operation);
-        }
-
-
-        private AssignmentTree ParseAssignment(Location location, Precedence precedence)
-        {
-            SyntaxTree expression = new ExpressionParser(Lexer, precedence).Parse();
-            return new AssignmentTree(location, left, expression);
-        }
-
-        private void ParseGetMember()
-        {
-            // TODO: Getting and setting members and calls
-        }
-
-        private void ParseCall()
-        {
-
         }
 
     }

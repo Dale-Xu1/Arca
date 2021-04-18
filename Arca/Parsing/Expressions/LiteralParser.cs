@@ -41,6 +41,8 @@ namespace Arca.Parsing.Expressions
         {
             switch (Lexer.Current.Type)
             {
+                case TokenType.Identifier: return new IdentifierParser(Lexer).Parse();
+
                 case TokenType.Int: return ParseInt(location);
                 case TokenType.Float: return ParseFloat(location);
 
