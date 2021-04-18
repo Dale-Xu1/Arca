@@ -26,7 +26,7 @@ namespace Arca.Parsing.Expressions
         public override string ToString(int indent)
         {
             string symbol = SymbolLexer.Symbols[Operation];
-            return $"{Whitespace(indent)}{symbol}({Expression})";
+            return $"{Whitespace()}{symbol}({Expression})";
         }
 
     }
