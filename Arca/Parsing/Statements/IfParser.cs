@@ -65,17 +65,10 @@ namespace Arca.Parsing.Statements
             SyntaxTree thenBranch;
             SyntaxTree elseBranch = null;
 
-            if (Match(TokenType.Then))
-            {
-                if (Lexer.NewLine) thenBranch = new BlockParser(Lexer).Parse();
-                else thenBranch = new StatementParser(Lexer).Parse();
-            }
-            else
-            {
-                // A new line is required if then is not provided
-                ExpectNewLine();
-                thenBranch = new BlockParser(Lexer).Parse();
-            }
+            Expect(TokenType.Then); // Deliminate condition expression from first statement
+
+            if (Lexer.NewLine) thenBranch = new BlockParser(Lexer).Parse();
+            else thenBranch = new StatementParser(Lexer).Parse();
 
             if (Lexer.Check(TokenType.Else))
             {
