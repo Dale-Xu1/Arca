@@ -1,12 +1,11 @@
-﻿using Arca.Lexing.StateMachines;
-using Arca.Lexing.Tokens;
+﻿using Arca.Lexing.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Arca.Lexing.Constants
+namespace Arca.Lexing.Tokenizers
 {
     class KeywordLexer
     {
@@ -28,19 +27,15 @@ namespace Arca.Lexing.Constants
         };
 
 
-        private readonly IdentifierMachine machine;
+        private readonly Token token;
 
 
-        public KeywordLexer(IdentifierMachine machine) => this.machine = machine;
+        public KeywordLexer(Token token) => this.token = token;
 
 
         public Token? Run()
         {
-            // Run identifier state machine
-            Token? token = machine.Run();
-            if (token == null) return null;
-
-            string identifier = ((Token) token).Value;
+            string identifier = token.Value;
 
             // Test if identifier matches with keyword
             foreach (KeyValuePair<TokenType, string> keyword in keywords)
@@ -48,8 +43,7 @@ namespace Arca.Lexing.Constants
                 if (string.Equals(identifier, keyword.Value))
                 {
                     // Create keyword token
-                    Location location = ((Token) token).Location;
-                    return new Token(identifier, location, keyword.Key);
+                    return new Token(identifier, token.Location, keyword.Key);
                 }
             }
 

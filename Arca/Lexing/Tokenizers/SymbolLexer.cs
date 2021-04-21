@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Arca.Lexing.Constants
+namespace Arca.Lexing.Tokenizers
 {
     class SymbolLexer
     {

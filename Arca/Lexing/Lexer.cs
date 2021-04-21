@@ -1,5 +1,4 @@
-﻿using Arca.Lexing.Constants;
-using Arca.Lexing.StateMachines;
+﻿using Arca.Lexing.Tokenizers;
 using Arca.Lexing.Tokens;
 using System;
 using System.Collections.Generic;
@@ -95,32 +94,9 @@ namespace Arca.Lexing
                 return new Token(stream.Location, TokenType.EndOfInput);
             }
 
-            // Run state machines if they can start
-            return RunStateMachines();
-        }
-
-        private Token? RunStateMachines()
-        {
-            if (IdentifierMachine.CanStart(stream))
-            {
-                IdentifierMachine machine = new IdentifierMachine(stream);
-                KeywordLexer keywordLexer = new KeywordLexer(machine);
-
-                return keywordLexer.Run();
-            }
-            else if (NumberMachine.CanStart(stream))
-            {
-                NumberMachine machine = new NumberMachine(stream);
-                return machine.Run();
-            }
-            else if (StringMachine.CanStart(stream))
-            {
-                StringMachine machine = new StringMachine(stream);
-                return machine.Run();
-            }
-
-            SymbolLexer symbolLexer = new SymbolLexer(stream);
-            return symbolLexer.Run();
+            // Tokenize literals
+            LiteralLexer lexer = new LiteralLexer(stream);
+            return lexer.Run();
         }
 
     }
