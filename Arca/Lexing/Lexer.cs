@@ -73,19 +73,6 @@ namespace Arca.Lexing
             }
         }
 
-
-        public bool Check(params TokenType[] types)
-        {
-            foreach (TokenType type in types)
-            {
-                // Find match
-                if (Current.Type == type) return true;
-            }
-
-            return false;
-        }
-
-
         private Token? Run()
         {
             if (stream.Current == '\0')
@@ -97,6 +84,18 @@ namespace Arca.Lexing
             // Tokenize literals
             LiteralLexer lexer = new LiteralLexer(stream);
             return lexer.Run();
+        }
+
+
+        public bool Check(params TokenType[] types)
+        {
+            foreach (TokenType type in types)
+            {
+                // Find match
+                if (Current.Type == type) return true;
+            }
+
+            return false;
         }
 
     }

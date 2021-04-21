@@ -17,16 +17,12 @@ namespace Arca.Parsing
         protected SyntaxTree(Location location) => Location = location;
 
 
-        public override string ToString() => ToString(0);
-        public abstract string ToString(int indent);
+        public abstract void Write(int indent = 0);
 
-        protected string Whitespace(int indent = 0)
+        protected void Whitespace(int indent = 0)
         {
-            // Create whitespace characters
-            string whitespace = "";
-            for (int i = 0; i < indent; i++) whitespace += "    ";
-
-            return whitespace;
+            // Write whitespace to console
+            for (int i = 0; i < indent; i++) Console.Write("    ");
         }
 
     }

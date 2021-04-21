@@ -17,7 +17,7 @@ namespace Arca.Parsing.Expressions
         public LiteralTree(Location location, T value) : base(location) => Value = value;
 
 
-        public override string ToString(int indent) => $"{Whitespace()}{Value}";
+        public override void Write(int indent = 0) => Console.Write(Value);
 
     }
 

@@ -21,7 +21,7 @@ namespace Arca
 
             while (true)
             {
-                Console.WriteLine($"[{lexer.Current.Location}]{(lexer.NewLine ? " \\n" : "")} {lexer.Current.Type} {lexer.Current.Value}");
+                Console.WriteLine($"{$"[{lexer.Current.Location}]",-6}{(lexer.NewLine ? " \\n" : "")} {lexer.Current.Type} '{lexer.Current.Value}'");
 
                 if (lexer.Current.Type == Lexing.Tokens.TokenType.EndOfInput) break;
                 lexer.Next();
@@ -31,7 +31,7 @@ namespace Arca
             BlockParser parser = new BlockParser(new Lexer(new InputStream(file)));
             BlockTree tree = parser.Parse();
 
-            Console.WriteLine(tree);
+            tree.Write();
         }
 
 

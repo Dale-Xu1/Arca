@@ -23,10 +23,12 @@ namespace Arca.Parsing.Expressions
         }
 
 
-        public override string ToString(int indent)
+        public override void Write(int indent = 0)
         {
             string symbol = SymbolLexer.Symbols[Operation];
-            return Whitespace() + symbol + Expression;
+
+            Console.Write(symbol);
+            Expression.Write();
         }
 
     }

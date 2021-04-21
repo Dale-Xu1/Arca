@@ -21,7 +21,16 @@ namespace Arca.Parsing.Expressions
         }
 
 
-        public override string ToString(int indent) => $"{Whitespace()}({Expression}.{Member})";
+        public override void Write(int indent = 0)
+        {
+            Console.Write("(");
+
+            Expression.Write();
+            Console.Write(".");
+            Member.Write();
+
+            Console.Write(")");
+        }
 
     }
 

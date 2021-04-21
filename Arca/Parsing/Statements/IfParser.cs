@@ -26,21 +26,23 @@ namespace Arca.Parsing.Statements
         }
 
 
-        public override string ToString(int indent)
+        public override void Write(int indent = 0)
         {
-            string whitespace = Whitespace(indent);
-            StringBuilder builder = new StringBuilder(whitespace);
+            Whitespace(indent);
 
-            builder.Append($"if {Condition}\n");
+            Console.Write("if ");
+            Condition.Write();
 
-            builder.Append(ThenBranch.ToString(indent + 1));
+            Console.WriteLine();
+
+            ThenBranch.Write(indent + 1);
             if (ElseBranch != null)
             {
-                builder.Append($"\n{whitespace}else\n");
-                builder.Append(ElseBranch.ToString(indent + 1));
-            }
+                Whitespace(indent);
+                Console.WriteLine("else");
 
-            return builder.ToString();
+                ElseBranch.Write(indent + 1);
+            }
         }
 
     }

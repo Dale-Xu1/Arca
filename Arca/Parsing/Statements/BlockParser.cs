@@ -16,20 +16,13 @@ namespace Arca.Parsing.Statements
         public BlockTree(Location location, SyntaxTree[] statements) : base(location) => Statements = statements;
 
 
-        public override string ToString(int indent)
+        public override void Write(int indent = 0)
         {
-            StringBuilder builder = new StringBuilder();
-
             for (int i = 0; i < Statements.Length; i++)
             {
                 SyntaxTree statement = Statements[i];
-                builder.Append(statement.ToString(indent));
-
-                // Add new line unless it's the last element
-                if (i < Statements.Length - 1) builder.Append('\n');
+                statement.Write(indent);
             }
-
-            return builder.ToString();
         }
 
     }
